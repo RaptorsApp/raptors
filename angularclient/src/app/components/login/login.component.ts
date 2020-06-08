@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
+import {environment} from 'src/environments/environment';
 import {RobotTaskService} from "../../services/robotTask.service";
 import {StoreService} from "../../services/store.service";
 
@@ -21,6 +22,14 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    window.addEventListener('message', (event) => {
+        if(event.data && typeof event.data === 'string' && event.origin.includes(environment.dashboardUrl)) {
+          const credentials = JSON.parse(event.data);
+          this.email = credentials.login;
+          this.password = credentials.password;
+          this.login();
+        }
+    });
   }
 
 
